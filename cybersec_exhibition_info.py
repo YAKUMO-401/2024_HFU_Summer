@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import selenium_cybersec_SC import get_exd_detail
+from selenium_cybersec_SC import get_exd_detail
 
 def get_cybersec_exd_info(is_export_to_csv=True):
     url = "https://cybersec.ithome.com.tw/2024/exhibitionDirectory"
@@ -26,11 +26,7 @@ def get_cybersec_exd_info(is_export_to_csv=True):
         else:
           exd_id = ""
 
-        test_driver = webdriver.Firfox()
-        exd_data = get_exd_detail(
-           url=href,
-           driver=test_driver
-        )
+
     
         exd_cards_info.append({
             'exd_link': href,

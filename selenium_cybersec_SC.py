@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 def create_webdriver():
     return webdriver.Firefox()
@@ -7,14 +8,24 @@ def create_webdriver():
 def get_exd_detail(url,driver):
     data = dict()
     driver.get(url)
+    try:
+        telephone_element = driver.find_element(By.CLASS_NAME,"info-tel")
+        data['telephone'] = telephone_element.text
+    except NoSuchElementException:
+        print(f"URL: {url}, has no telephone")
 
-    telephone_element = driver.find_element(By.CLASS_NAME,"info-tel")
-    if telephone_element:
-       data['telephone'] = telephone_element.text
 
-    mail_element = driver.find_element(By.CLASS_NAME,"info-mail")
-    if mail_element:
-       data['email'] = mail_element.text
+    try:
+        mail_element = driver.find_element(By.CLASS_NAME,"info-mail")
+        data['email'] = mail_element.text
+    except NoSuchElementException:
+        print(f"URL: {url}, has no Email")
+
+    try:
+        desc_element = driver.find_element(By.CLASS_NAME,"ex-foreword")
+        data['description'] = desc_element.text
+    except NoSuchElementException:
+        print(f"URL: {url}, has no description")
 
 
     web_elements = driver.find_elements(By.CLASS_NAME,"border-icon")
@@ -28,11 +39,7 @@ def get_exd_detail(url,driver):
             else:
                 print("Web not found.")
 
-    desc_element = driver.find_element(By.CLASS_NAME,"ex-foreword")
-    if desc_element:
-        print("Desc:",desc_element.text)
-    else:
-        print("Desc not found.")
+
 
 
     return data
