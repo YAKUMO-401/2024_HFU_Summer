@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort,render_template
 
 from linebot.v3 import (
     WebhookHandler
@@ -32,9 +32,12 @@ if channel_access_token is None:
     sys.exit(1)
 
 
-configuration = Configuration(access_token='channel_access_token')
-handler = WebhookHandler('channel_secret')
+configuration = Configuration(access_token=channel_access_token)
+handler = WebhookHandler(channel_secret)
 
+@app.route("/")
+def say_hello_world(username=""):
+    return render_template("hi.html",name=username)
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -67,4 +70,4 @@ def handle_message(event):
         )
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
