@@ -17,23 +17,17 @@ from linebot.v3.webhooks import (
     MessageEvent,
     TextMessageContent
 )
+from handle_keys import get_secret_and_token
 
-import os,sys
+
 
 app = Flask(__name__)
 
-channel_secret = os.getenv('LINEBOT_SECRET_KEY', None)
-channel_access_token = os.getenv('LINEBOT_ACCESS_TOKEN', None)
-if channel_secret is None:
-    print('Specify LINEBOT_SECRET_KEY as environment variable.')
-    sys.exit(1)
-if channel_access_token is None:
-    print('Specify LINEBOT_ACCESS_TOKEN as environment variable.')
-    sys.exit(1)
 
+keys = get_secret_and_token()
 
-configuration = Configuration(access_token=channel_access_token)
-handler = WebhookHandler(channel_secret)
+configuration = Configuration(access_token='LINEBOT_ACCESS_TOKEN')
+handler = WebhookHandler('LINEBOT_SECRET_KEY')
 
 @app.route("/")
 def say_hello_world(username=""):
