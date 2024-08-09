@@ -19,15 +19,14 @@ from linebot.v3.webhooks import (
 )
 from handle_keys import get_secret_and_token
 
-
+from openai_api import chat_with_chatgpt
+import os
 
 app = Flask(__name__)
-
-
 keys = get_secret_and_token()
+handler = WebhookHandler(keys['LINEBOT_SECRET_KEY'])
+configuration = Configuration(access_token=keys['LINEBOT_ACCESS_TOKEN'])
 
-configuration = Configuration(access_token='LINEBOT_ACCESS_TOKEN')
-handler = WebhookHandler('LINEBOT_SECRET_KEY')
 
 @app.route("/")
 def say_hello_world(username=""):
@@ -53,13 +52,19 @@ def callback():
 
 
 @handler.add(MessageEvent, message=TextMessageContent)
-def handle_message(event):
+def handle_message(event):    
+    user_message = event.message.text
+    api_key = keys["OPENAI_API_KEY"]
+    response = chat_with_chatgpt(user_message,api_key)
+    
+
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)]
+                messages=[
+                    TextMessage(text=response)]
             )
         )
 
