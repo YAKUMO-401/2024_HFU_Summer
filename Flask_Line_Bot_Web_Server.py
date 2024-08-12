@@ -53,9 +53,10 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):    
+    user_id = event.source.user_id
     user_message = event.message.text
     api_key = keys["OPENAI_API_KEY"]
-    response = chat_with_chatgpt(user_message,api_key)
+    response = chat_with_chatgpt(user_id,user_message,api_key)
     
 
     with ApiClient(configuration) as api_client:
