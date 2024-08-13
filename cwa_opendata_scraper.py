@@ -3,15 +3,15 @@ import json
 import os
 from pprint import pprint 
 
-    weather_element_name = {
+weather_element_name = {
         'Wx':"天氣現象",
-        'Pop':"降雨機率",
+        'PoP':"降雨機率",
         'CI':"舒適度",
         'MinT':'時段最低溫度',
         'MaxT':'時段最高溫'
     }
 
-def get_cuties_weather(cwa_api_key,location_name):
+def get_cities_weather(cwa_api_key,location_name):
     header={'Accept':'application/json'}
     parameters={
         'Authorization':cwa_api_key,
@@ -31,12 +31,12 @@ def get_cuties_weather(cwa_api_key,location_name):
 
     cities_weather = dict()
 
-    for location in weathr_data['records']['location']:
-        
+    for location in weathr_data['records']['location']:        
         print(location['locationName'])
         city_name = location['locationName']
-        city_weather =get_city_weather(location)
-        cities_weather[city_name]=cities_weather
+        city_weather = get_city_weather(location)
+        # 改 下面39行value: cities_weather -> city_weather
+        cities_weather[city_name]=city_weather
         
     return cities_weather
 
@@ -62,7 +62,7 @@ def get_city_weather(location):
 
 if __name__ == '__main__':
     cwa_api_key = os.getenv("CWA_API_KEY", None)
-    locations = ['桃園市', '花蓮縣', '臺中市']
+    locations = ['臺中市']
     if cwa_api_key:
         pprint(get_cities_weather(cwa_api_key, locations))
     else:

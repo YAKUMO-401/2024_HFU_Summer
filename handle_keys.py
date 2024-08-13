@@ -1,22 +1,23 @@
 import os,sys
 
 def get_secret_and_token():
+        tokens_name = [
+        'LINEBOT_SECRET_KEY',
+        'LINEBOT_ACCESS_TOKEN',
+        "OPENAI_API_KEY",
+        "CWA_API_KEY"
+    ]
 
-    channel_secret = os.getenv('LINEBOT_SECRET_KEY', None)
-    channel_access_token = os.getenv('LINEBOT_ACCESS_TOKEN', None)
-    openai_api_key = os.getenv("OPENAI_API_KEY",None)
-    if channel_secret is None:
-        print('Specify LINEBOT_SECRET_KEY as environment variable.')
-        sys.exit(1)
-    if channel_access_token is None:
-        print('Specify LINEBOT_ACCESS_TOKEN as environment variable.')
-        sys.exit(1)
-    if openai_api_key is None:
-        print('Specify openai_api_key as environment variable.')
-        sys.exit(1)
+        keys = dict()
+        for token_name in tokens_name:
+            token = os.getenv(token_name, None)
+            if token is None:
+                print(f'Specify {token_name} as environment variable.')
+                sys.exit(1)
+            keys[token_name] = token
+            
+        return keys
 
-    return {
-        'LINEBOT_SECRET_KEY':channel_secret,
-        'LINEBOT_ACCESS_TOKEN':channel_access_token,
-        'OPENAI_API_KEY':openai_api_key
-    }
+if __name__ == "__main__":
+    keys = get_secret_and_token()
+    print(keys["LINEBOT_ACCESS_TOKEN"])

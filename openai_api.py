@@ -5,7 +5,7 @@ from pprint import pprint
 
 chat_history = dict()
 
-def chat_with_chatgpt(user_id,user_message,openai_api_key):
+def chat_with_chatgpt(user_id,user_message,openai_api_key,extra_prompt=""):
     client = OpenAI(api_key=openai_api_key)
     if user_id in chat_history:
         chat_history[user_id].append({"role": "user","content": user_message})
